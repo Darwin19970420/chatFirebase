@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form action="">
+        <div>
+        <label for"nombre">Nombre</label>
+        <input type="text" id="nombre">
+        </div>
+
+        <div>
+        <label for"mensaje">Mensaje</label>
+        <textarea id="mensaje"></textarea>
+        </div>
+        <button type="button" id="btnEnviar">Enviar</button>
+    </form>
+
+    <ul id="chatUl">
+        <li>
+            <b>Nombre:</b> Mensaje 
+        </li>
+        <li>
+            <b>Nombre:</b> Mensaje 
+        </li>
+    </ul>
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-database.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyAIoXA4eDX5fh3wBNdxFL1RUL3PcKVnFIM",
+    authDomain: "chatfirebase-f005f.firebaseapp.com",
+    databaseURL: "https://chatfirebase-f005f.firebaseio.com",
+    projectId: "chatfirebase-f005f",
+    storageBucket: "",
+    messagingSenderId: "1059970645606",
+    appId: "1:1059970645606:web:eb495cee9eda8baa"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  var txtNombre = document.getElementById('nombre');
+  var txtMensaje = document.getElementById('mensaje');
+  var btnEnviar = document.getElementById('btnEnviar');
+  var chatUl = document.getElementById('chatUl');
+
+  btnEnviar.addEventListener("click", function(){
+      var nombre = txtNombre.value;
+      var mensaje = txtMensaje.value;
+
+
+      firebase.database().ref('chat').push( {
+          name: nombre,
+          message: mensaje
+      });
+      //alert(nombre);
+  });
+
+  firebase.database().ref('chat')
+  .on('value', function(snapshot){
+    var html  = '';
+    snapshot.forEach(function (e){
+        var element = e.val();
+        var nombre = element.name;
+        var mensaje = element.message;
+        html += " <li> <b>"+nombre+":</b>"+ mensaje +"</li>"; 
+    });
+    chatUl.innerHTML = html;
+  });
+</script>
+</body>
+</html>
